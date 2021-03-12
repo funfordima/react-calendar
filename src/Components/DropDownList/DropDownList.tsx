@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../styledComponents';
 import Menu from '../Menu/Menu';
 
 const Form = styled.form`
@@ -11,16 +10,9 @@ const Form = styled.form`
   color: #000;
 `;
 
-const ButtonResetForm = styled(Button)`
-  &:hover {
-    background-color: #d32f2f;
-  }
-`;
-
 const DropDownList: React.FC = () => (
   <Form name='members-form'>
     <Menu />
-    <ButtonResetForm type='reset' value='Clear it!' />
   </Form>
 );
 

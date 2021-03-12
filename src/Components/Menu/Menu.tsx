@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Button from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
 
 const MenuContainer = styled.div`
@@ -76,6 +77,12 @@ const MenuTitle = styled.div`
   }
 `;
 
+const ButtonResetForm = styled(Button)`
+  &:hover {
+    background-color: #d32f2f;
+  }
+`;
+
 const MenuComponent: React.FC = () => {
   const [isActive, setActive] = useState(false);
   const [isShowTitle, setShowTitle] = useState('');
@@ -90,24 +97,27 @@ const MenuComponent: React.FC = () => {
   };
 
   return (
-    <MenuContainer>
-      <Menu
-        data-state={isActive ? 'active' : ''}
-        className='menu'
-        onClick={handleMenuClick}
-      >
-        <MenuContent className='menu__content'>
-          <MenuContentComponent data={['Tamara', 'Nick']} handleClick={handleTitleClick} />
-        </MenuContent>
-        <MenuTitle
-          className='menu__title'
-          data-default={isShowTitle}
-          tab-index='0'
+    <>
+      <MenuContainer>
+        <Menu
+          data-state={isActive ? 'active' : ''}
+          className='menu'
+          onClick={handleMenuClick}
         >
-          {isShowTitle}
-        </MenuTitle>
-      </Menu>
-    </MenuContainer>
+          <MenuContent className='menu__content'>
+            <MenuContentComponent data={['Tamara', 'Nick']} handleClick={handleTitleClick} />
+          </MenuContent>
+          <MenuTitle
+            className='menu__title'
+            data-default={isShowTitle}
+            tab-index='0'
+          >
+            {isShowTitle}
+          </MenuTitle>
+        </Menu>
+      </MenuContainer>
+      <ButtonResetForm type='reset' value='Clear it!' onClick={() => setShowTitle('')} />
+    </>
   )
 };
 
