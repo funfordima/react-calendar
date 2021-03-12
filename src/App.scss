@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 10px;
+}
+
+html {
+  height: 100%;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.5rem;
+}
+
+.menu[data-state='active'] {
+  .menu__title {
+    &::before {
+      transform: translate(-3px, -50%) rotate(-45deg);
+    }
+
+    &::after {
+      transform: translate(3px, -50%) rotate(45deg);
+    }
+  }
+
+  .menu__content {
+    opacity: 1;
+  }
+
+  .menu__input + .menu__label {
+    max-height: 4rem;
+    border-top-width: 1px;
+  }
+}
