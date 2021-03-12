@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Button from '../styledComponents';
+import { Button } from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
 
 const MenuContainer = styled.div`

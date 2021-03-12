@@ -14,6 +14,22 @@ html {
   font-size: 1.5rem;
 }
 
+#root {
+  margin: 0 auto;
+  padding: 0 3rem;
+  width: 100%;
+  max-width: 120rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: #fafafa;
+
+  @media (max-width: 530px) {
+    padding: 0 2rem;
+  }
+}
+
 .menu[data-state='active'] {
   .menu__title {
     &::before {
