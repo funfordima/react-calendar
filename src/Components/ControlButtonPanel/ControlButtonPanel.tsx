@@ -11,7 +11,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  order: 1;
   justify-content: space-around;
 
   @media (max-width: 601px) {

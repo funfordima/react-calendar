@@ -46,3 +46,35 @@ export const UserButton = styled.button`
     padding: 0.5rem 1rem;
   }
 `;
+
+export const MainItem = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 500;
+  background-color: #fff;
+  position: relative;
+
+  &[data-complete='true'] {
+    cursor: pointer;
+  }
+
+  @media (max-width: 601px) {
+    font-size: 1.5rem;
+  }
+
+  &[data-complete='true'] {
+    background-color: #d3f5b4;
+
+    & div {
+      display: block;
+    }
+
+    & h3 {
+      display: block;
+    }
+  }
+`;
