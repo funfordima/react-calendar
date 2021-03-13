@@ -5,8 +5,7 @@ import { Button, UserButton } from '../styledComponents';
 const Container = styled.div`
   margin: 20px auto;
   width: 100%;
-  max-width: 700px;
-  height: 100%;
+  max-width: 70rem;
   display: flex;
   justify-content: center;
   align-items: center;
