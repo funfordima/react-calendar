@@ -4,6 +4,7 @@ import GenerateItems from './GenerateItems/GenerateItems';
 import MainContent from './MainContent/MainContent';
 
 const MainContainer = styled.main`
+  margin: 5rem 0;
   width: 100%;
   height: 50rem;
   display: flex;

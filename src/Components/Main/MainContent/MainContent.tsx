@@ -38,14 +38,16 @@ interface MainContentProps {
 const MainContent: React.FC<MainContentProps> = ({ events }) => (
   <>
     {events.map(({
+      id,
       title,
       complete,
       day,
       time,
       participants,
     }) => (
-      <div key={day + time}>
+      <div key={id}>
         <MainItem
+          data-key={id}
           data-complete={complete}
           data-day={day}
           data-time={time}

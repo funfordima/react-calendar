@@ -16,7 +16,7 @@ html {
 
 #root {
   margin: 0 auto;
-  padding: 0 3rem;
+  padding: 3rem;
   width: 100%;
   max-width: 120rem;
   height: 100vh;
@@ -48,5 +48,25 @@ html {
   .menu__input + .menu__label {
     max-height: 4rem;
     border-top-width: 1px;
+  }
+}
+
+@keyframes hvr-buzz {
+  50% {
+    transform: translateX(2px) rotate(2deg);
+  }
+  100% {
+    transform: translateX(-2px) rotate(-2deg);
+  }
+}
+
+.hvr-buzz {
+  transform: perspective(1px) translateZ(0);
+
+  &:hover {
+    animation-name: hvr-buzz;
+    animation-duration: 0.15s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
 }
