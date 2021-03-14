@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, UserButton } from '../styledComponents';
+import ModalDialog from '../ModalDialog';
 
 const Container = styled.div`
   margin: 20px auto;
@@ -85,25 +86,40 @@ const AddEventButton = styled(Button)`
   }
 `;
 
-const ControlButtonPanel: React.FC = () => (
-  <Container>
-    <AddMemberButton
-      type='submit'
-      value='New Member +'
-    >
-      New Member +
-    </AddMemberButton>
-    <ChangeMemberButton
-      type='submit'
-      value='Change User'
-    >
-      Change User
-    </ChangeMemberButton>
-    <AddEventButton
-      type='submit'
-      value='New Event +'
-    />
-  </Container>
-);
+const ControlButtonPanel: React.FC = () => {
+  const [isShow, setShow] = useState(false);
 
+  const addNewUser = (): void => {
+    setShow(true);
+  };
+
+  const handleCloseModal = (): void => {
+    setShow(false);
+  };
+
+  return (
+    <>
+      {isShow && <ModalDialog handleCloseModal={handleCloseModal} />}
+      <Container>
+        <AddMemberButton
+          type='submit'
+          value='New Member +'
+          onClick={addNewUser}
+        >
+          New Member +
+        </AddMemberButton>
+        <ChangeMemberButton
+          type='submit'
+          value='Change User'
+        >
+          Change User
+        </ChangeMemberButton>
+        <AddEventButton
+          type='submit'
+          value='New Event +'
+        />
+      </Container>
+    </>
+  );
+};
 export default ControlButtonPanel;
