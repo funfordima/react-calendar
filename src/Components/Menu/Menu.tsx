@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import MainContext from '../../context/mainContext';
 import { Button } from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
-import Data from '../../utils/data';
-import { MAIN_URL, MEMBERS } from '../../constants/constants';
-import { Members } from '../../interfaces';
+// import { MEMBERS } from '../../constants/constants';
+// import { Members } from '../../interfaces';
 
 const MenuContainer = styled.div`
 `;
@@ -89,7 +89,8 @@ const ButtonResetForm = styled(Button)`
 const MenuComponent: React.FC = () => {
   const [isActive, setActive] = useState(false);
   const [isShowTitle, setShowTitle] = useState('');
-  const [members, setMembers] = useState<string[] | []>([]);
+
+  const { members } = useContext(MainContext);
 
   const handleMenuClick = (): void => {
     setActive((state) => !state);
@@ -99,22 +100,6 @@ const MenuComponent: React.FC = () => {
     setActive((state) => !state);
     setShowTitle(str);
   };
-
-  useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      const response = await new Data(MAIN_URL).getData(MEMBERS);
-      const json = await response.json();
-
-      const receivedMembers = JSON.parse((json[json.length - 1]).data);
-
-      localStorage.setItem(MEMBERS, JSON.stringify(receivedMembers));
-
-      const mapMembers = receivedMembers.map(({ name }: Members) => name);
-      setMembers(mapMembers);
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <>

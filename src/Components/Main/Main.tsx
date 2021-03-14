@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import MainContext from '../../context/mainContext'
 import Loader from '../Loader';
 import GenerateItems from './GenerateItems/GenerateItems';
 import MainContent from './MainContent/MainContent';
-import Data from '../../utils/data';
-import { EVENTS, MAIN_URL, dayLabel, timeLabel } from '../../constants/constants';
-import { Events } from '../../interfaces';
+import { dayLabel, timeLabel } from '../../constants/constants';
 
 const MainContainer = styled.main`
   margin: 5rem 0;
@@ -89,23 +88,7 @@ const ContentContainer = styled.div`
 `;
 
 const Main: React.FC = () => {
-  const [events, setEvents] = useState<Events[] | []>([]);
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      const response = await new Data(MAIN_URL).getData(EVENTS);
-      const json = await response.json();
-
-      const receivedEvents = JSON.parse((json[json.length - 1]).data);
-
-      localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
-      setEvents(receivedEvents as unknown as Events[]);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  const { events, isLoading } = useContext(MainContext);
 
   return (
     <>
