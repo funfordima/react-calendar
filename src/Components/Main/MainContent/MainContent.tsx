@@ -20,7 +20,7 @@ const Title = styled.h3`
   }
 `;
 
-const BtnClose = styled.div`
+const DelEventBtn = styled.div`
   display: none;
   position: absolute;
   right: 5px;
@@ -33,9 +33,10 @@ const BtnClose = styled.div`
 
 interface MainContentProps {
   events: Events[];
+  deleteEvent: () => void;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ events }) => (
+const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent }) => (
   <>
     {events.map(({
       id,
@@ -57,9 +58,9 @@ const MainContent: React.FC<MainContentProps> = ({ events }) => (
           <Title>
             {title}
           </Title>
-          <BtnClose tab-index='0'>
+          <DelEventBtn tab-index='0' onClick={deleteEvent}>
             ×
-          </BtnClose>
+          </DelEventBtn>
         </MainItem>
       </div>
     ))}

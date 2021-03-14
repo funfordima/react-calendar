@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import MainContext from '../../context/mainContext'
 import Loader from '../Loader';
 import GenerateItems from './GenerateItems/GenerateItems';
 import MainContent from './MainContent/MainContent';
+import ModalDialog from '../ModalDialog';
+import DeleteEventComponent from '../DeleteEventComponent';
 import { dayLabel, timeLabel } from '../../constants/constants';
 
 const MainContainer = styled.main`
@@ -89,6 +91,15 @@ const ContentContainer = styled.div`
 
 const Main: React.FC = () => {
   const { events, isLoading } = useContext(MainContext);
+  const [isShow, setShow] = useState(false);
+
+  const handlerDelEvent = (): void => {
+    setShow(true);
+  };
+
+  const handleCloseModal = (): void => {
+    setShow(false);
+  };
 
   return (
     <>
@@ -102,8 +113,13 @@ const Main: React.FC = () => {
             <GenerateItems data={timeLabel} />
           </ColContainer>
           <ContentContainer>
-            <MainContent events={events} />
+            <MainContent events={events} deleteEvent={handlerDelEvent} />
           </ContentContainer>
+          {isShow
+            && <ModalDialog handleCloseModal={handleCloseModal}>
+              <DeleteEventComponent eventTitle='123' />
+            </ModalDialog>
+          }
         </MainContainer>
       }
     </>
