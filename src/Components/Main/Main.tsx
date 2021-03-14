@@ -99,7 +99,7 @@ const Main: React.FC = () => {
 
       const receivedEvents = JSON.parse((json[json.length - 1]).data);
 
-      localStorage.setItem('events', JSON.stringify(receivedEvents));
+      localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
       setEvents(receivedEvents as unknown as Events[]);
       setLoading(false);
     };
