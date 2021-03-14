@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Loader from '../Loader';
 import GenerateItems from './GenerateItems/GenerateItems';
 import MainContent from './MainContent/MainContent';
+import Data from '../../utils/data';
+import { EVENTS, MAIN_URL, dayLabel, timeLabel } from '../../constants/constants';
+import { Events } from '../../interfaces';
 
 const MainContainer = styled.main`
   margin: 5rem 0;
@@ -85,66 +89,41 @@ const ContentContainer = styled.div`
 `;
 
 const Main: React.FC = () => {
-  const events = [
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 0 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 0 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 0 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 0 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 0 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 1 },
-    { "id": Date.now().toString(), "title": "Relax", "participants": ["Ivan"], "day": "Mon", "time": "17:00", "complete": true, "dataCol": 1, "dataRow": 1 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 1 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 1 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 1 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 2 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 2 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 2 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 2 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 2 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 3 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 3 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 3 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 3 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 3 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 4 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 4 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 4 },
-    { "id": Date.now().toString(), "title": "Daily StandUp", "participants": ["Tanya"], "day": "Fri", "time": "11:00", "complete": true, "dataCol": 3, "dataRow": 4 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 4 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 5 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 5 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 5 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 5 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 5 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 6 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 6 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 6 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 6 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 6 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 7 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 7 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 7 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 7 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 4, "dataRow": 7 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 0, "dataRow": 8 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 1, "dataRow": 8 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 2, "dataRow": 8 },
-    { "id": Date.now().toString(), "title": "", "participants": [], "day": "", "time": "", "complete": false, "dataCol": 3, "dataRow": 8 },
-    { "id": Date.now().toString(), "title": "FE Team Sync", "participants": ["Maria"], "day": "Tue", "time": "14:00", "complete": true, "dataCol": 4, "dataRow": 8 }
-  ];
+  const [events, setEvents] = useState<Events[] | []>([]);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      const response = await new Data(MAIN_URL).getData(EVENTS);
+      const json = await response.json();
+
+      const receivedEvents = JSON.parse((json[json.length - 1]).data);
+
+      localStorage.setItem('events', JSON.stringify(receivedEvents));
+      setEvents(receivedEvents as unknown as Events[]);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <MainContainer>
-      <RowContainer>
-        <GenerateItems data={['Name', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']} />
-      </RowContainer>
-      <ColContainer>
-        <GenerateItems data={['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00']} />
-      </ColContainer>
-      <ContentContainer>
-        <MainContent events={events} />
-      </ContentContainer>
-    </MainContainer>
+    <>
+      {isLoading
+        ? <Loader />
+        : <MainContainer>
+          <RowContainer>
+            <GenerateItems data={dayLabel} />
+          </RowContainer>
+          <ColContainer>
+            <GenerateItems data={timeLabel} />
+          </ColContainer>
+          <ContentContainer>
+            <MainContent events={events} />
+          </ContentContainer>
+        </MainContainer>
+      }
+    </>
   );
 };
 
