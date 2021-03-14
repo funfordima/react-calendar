@@ -101,8 +101,8 @@ const ControlButtonPanel: React.FC = () => {
   return (
     <>
       {isShow
-        && <ModalDialog handleCloseModal={handleCloseModal}>
-          <CreateNewUserComponent />
+        && <ModalDialog>
+          <CreateNewUserComponent handleCloseModal={handleCloseModal} />
         </ModalDialog>}
       <Container>
         <AddMemberButton

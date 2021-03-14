@@ -10,4 +10,6 @@ export const message = {
   noMember: 'Please select a participant',
   noDay: 'Please select the day of the event',
   noTime: 'Please select the time of the event',
+  wrongName: 'Please type correct name',
+  existName: 'Entered name already exists',
 };

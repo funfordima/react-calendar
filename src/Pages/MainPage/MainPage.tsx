@@ -4,9 +4,10 @@ import HeaderComponent from '../../Components/Header/Header';
 import ControlButtonPanel from '../../Components/ControlButtonPanel/ControlButtonPanel';
 import Main from '../../Components/Main/Main';
 import FooterComponent from '../../Components/Footer/Footer';
+import mapMembers from '../../utils/mapMembers';
 import Data from '../../utils/data';
 import { EVENTS, MAIN_URL, MEMBERS } from '../../constants/constants';
-import { Events, Members } from '../../interfaces';
+import { Events } from '../../interfaces';
 
 const MainPage: React.FC = () => {
   const [events, setEvents] = useState<Events[]>([]);
@@ -17,6 +18,7 @@ const MainPage: React.FC = () => {
     events,
     members,
     isLoading,
+    setMembers,
   };
 
   useEffect(() => {
@@ -43,12 +45,12 @@ const MainPage: React.FC = () => {
 
       localStorage.setItem(MEMBERS, JSON.stringify(receivedMembers));
 
-      const mapMembers = receivedMembers.map(({ name }: Members) => name);
-      setMembers(mapMembers);
+      const newMembers = mapMembers(receivedMembers);
+      setMembers(newMembers);
     };
 
     fetchData();
-  }, []);
+  }, [members]);
 
   return (
     <MainContext.Provider value={mainContext}>

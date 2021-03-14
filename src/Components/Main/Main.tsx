@@ -116,8 +116,8 @@ const Main: React.FC = () => {
             <MainContent events={events} deleteEvent={handlerDelEvent} />
           </ContentContainer>
           {isShow
-            && <ModalDialog handleCloseModal={handleCloseModal}>
-              <DeleteEventComponent eventTitle='123' />
+            && <ModalDialog >
+              <DeleteEventComponent eventTitle='123' handleCloseModal={handleCloseModal} />
             </ModalDialog>
           }
         </MainContainer>

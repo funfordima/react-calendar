@@ -5,6 +5,7 @@ interface Context {
   events: Events[];
   members: string[];
   isLoading: boolean;
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const MainContext = createContext({} as Context);
