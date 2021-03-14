@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import MainContext from '../../context/mainContext';
 import { Button } from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
+// import { MEMBERS } from '../../constants/constants';
+// import { Members } from '../../interfaces';
 
 const MenuContainer = styled.div`
 `;
@@ -87,6 +90,8 @@ const MenuComponent: React.FC = () => {
   const [isActive, setActive] = useState(false);
   const [isShowTitle, setShowTitle] = useState('');
 
+  const { members } = useContext(MainContext);
+
   const handleMenuClick = (): void => {
     setActive((state) => !state);
   };
@@ -105,7 +110,7 @@ const MenuComponent: React.FC = () => {
           onClick={handleMenuClick}
         >
           <MenuContent className='menu__content'>
-            <MenuContentComponent data={['Tamara', 'Nick']} handleClick={handleTitleClick} />
+            <MenuContentComponent data={members} handleClick={handleTitleClick} />
           </MenuContent>
           <MenuTitle
             className='menu__title'
