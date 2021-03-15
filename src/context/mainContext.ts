@@ -3,9 +3,9 @@ import { Events, Members } from '../interfaces';
 
 interface Context {
   events: Events[];
-  members: Members[];
+  // members: Members[];
   isLoading: boolean;
-  setMembers: React.Dispatch<React.SetStateAction<Members[]>>;
+  // setMembers: React.Dispatch<React.SetStateAction<Members[]>>;
   setEvents: React.Dispatch<React.SetStateAction<Events[]>>;
   idEvent: string;
   setUser: React.Dispatch<React.SetStateAction<Members>>;

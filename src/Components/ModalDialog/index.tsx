@@ -76,11 +76,12 @@ const ModalRow = styled.div`
 
 interface ModalDialogProps {
   children: React.ReactNode;
+  addClass?: boolean;
 }
 
-const ModalDialog: React.FC<ModalDialogProps> = ({ children }) => (
+const ModalDialog: React.FC<ModalDialogProps> = ({ children, addClass = true }) => (
   <Overlay>
-    <ModalContainer className='msg'>
+    <ModalContainer className={addClass ? 'msg' : ''}>
       <ModalRow className='-column'>
         {children}
       </ModalRow>

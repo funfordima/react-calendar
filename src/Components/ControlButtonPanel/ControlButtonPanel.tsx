@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 import mainContext from '../../context/mainContext';
-import { Button, UserButton } from '../styledComponents';
+import { UserButton } from '../styledComponents';
 import ModalDialog from '../ModalDialog';
 import CreateNewUserComponent from '../CreateNewUserComponent';
 import User from '../../utils/User';
@@ -81,11 +82,29 @@ const ChangeMemberButton = styled(UserButton)`
   }
 `;
 
-const AddEventButton = styled(Button)`
-  margin: 0;
+const AddEventButton = styled(NavLink)`
+  display: flex;
+  width: 15rem;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.4rem;
+  border: solid 1px #c7ccd1;
+  border-radius: 0.5rem;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #ffffff;
+  color: #333333;
 
   &:hover {
+    color: #ffffff;
     background-color: #81c784;
+  }
+
+  @media (max-width: 767px) {
+    padding: 0.5rem 1rem;
+    width: 18rem;
   }
 `;
 
@@ -132,9 +151,10 @@ const ControlButtonPanel: React.FC = () => {
         </ChangeMemberButton>
         {isAdmin
           && <AddEventButton
-            type='submit'
-            value='New Event +'
-          />
+            to='/events'
+          >
+            New Event +
+          </AddEventButton>
         }
       </Container>
     </>

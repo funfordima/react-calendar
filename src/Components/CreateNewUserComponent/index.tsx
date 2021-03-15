@@ -1,78 +1,17 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import MainContext from '../../context/mainContext';
+import { AlertError, AlertSuccess, ModalTitle, ModalForm, Label, Input, ModalRow } from '../styledComponents';
+import AppContext from '../../context/appContext';
 import User from '../../utils/User';
 import Admin from '../../utils/Admin';
-import { AlertError, AlertSuccess } from '../styledComponents';
 import { MEMBERS, MAIN_URL, message } from '../../constants/constants';
 import { Members } from '../../interfaces';
 import Data from '../../utils/data';
-// import mapMembers from '../../utils/mapMembers';
-
-const ModalTitle = styled.h3`
-  margin-bottom: 2rem;
-  text-align: center;
-`;
-
-const ModalForm = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Label = styled.label`
-  width: 10rem;
-  font-size: 1.5rem;
-`;
-
-const Input = styled.input`
-  margin: 0 auto;
-  padding-left: 1rem;
-  width: 23rem;
-  height: 4rem;
-  border-radius: 0.5rem;
-  border: 1px solid #c7ccd1;
-  position: relative;
-  outline: none;
-
-  &:hover {
-    border: 1px solid #d8093a;
-  }
-`;
 
 const CheckBox = styled(Input)`
 margin-left: 2rem;
   width: 1.5rem;
   height: 1.5rem;
-`;
-
-const ModalRow = styled.div`
-  margin-bottom: 2rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &:last-of-type {
-    margin-top: 2rem;
-  }
-
-  &.-column {
-    flex-direction: column;
-
-    & .error-msg {
-      margin-top: 1rem;
-      font-size: 1.4rem;
-      line-height: 1.5;
-
-      &:after {
-        width: 2rem;
-        height: 2rem;
-        background-size: 2rem 2rem;
-      }
-    }
-  }
 `;
 
 const Button = styled.input`
@@ -116,7 +55,7 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { setMembers } = useContext(MainContext);
+  const { setMembers } = useContext(AppContext);
 
   const { wrongName, existName, success } = message;
 
