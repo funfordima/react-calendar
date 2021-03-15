@@ -4,6 +4,8 @@ import MainContext from '../../context/mainContext';
 import { Button } from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
 import mapMembers from '../../utils/mapMembers';
+import { EVENTS } from '../../constants/constants';
+import { Events } from '../../interfaces';
 
 const MenuContainer = styled.div`
 `;
@@ -94,7 +96,22 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
   const [isActive, setActive] = useState(false);
   const [isShowTitle, setShowTitle] = useState('');
 
-  const { members } = useContext(MainContext);
+  const { members, setEvents } = useContext(MainContext);
+  const receiveEvents = JSON.parse(String(localStorage.getItem(EVENTS)));
+
+  /* eslint no-param-reassign: 0 */
+  const handleClickResetTitle = (): void => {
+    setShowTitle('');
+    const newEvents = receiveEvents.map((todo: Events) => {
+      if (todo.title) {
+        todo.complete = true;
+      }
+
+      return todo;
+    });
+
+    setEvents(newEvents);
+  };
 
   const handleMenuClick = (): void => {
     setActive((state) => !state);
@@ -104,6 +121,21 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
     setActive((state) => !state);
     setShowTitle(str);
     showTitle(str);
+
+    /* eslint no-param-reassign: 0 */
+    if (isShowBtn) {
+      const newEvents = receiveEvents.map((todo: Events) => {
+        if (!todo.participants.includes(str)) {
+          todo.complete = false;
+        } else {
+          todo.complete = true;
+        }
+
+        return todo;
+      });
+
+      setEvents(newEvents);
+    }
   };
 
   return (
@@ -126,7 +158,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
           </MenuTitle>
         </Menu>
       </MenuContainer>
-      {isShowBtn && <ButtonResetForm type='reset' value='Clear it!' onClick={() => setShowTitle('')} />}
+      {isShowBtn && <ButtonResetForm type='reset' value='Clear it!' onClick={handleClickResetTitle} />}
     </>
   )
 };

@@ -80,7 +80,9 @@ const AuthorizationPage: React.FC = () => {
   const [title, setTitle] = useState('');
 
   const showTitle = (str: string): void => {
-    setTitle(str);
+    if (str) {
+      setTitle(str);
+    }
   };
 
   const handleClickUser = (): void => {
@@ -107,6 +109,7 @@ const AuthorizationPage: React.FC = () => {
                 tab-index='0'
                 aria-label='Confirm'
                 onClick={handleClickUser}
+                disabled={!title}
               />
             </ModalRow>
           </ModalForm>
