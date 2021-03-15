@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, UserButton } from '../styledComponents';
 import ModalDialog from '../ModalDialog';
+import CreateNewUserComponent from '../CreateNewUserComponent';
 
 const Container = styled.div`
   margin: 20px auto;
@@ -99,7 +100,10 @@ const ControlButtonPanel: React.FC = () => {
 
   return (
     <>
-      {isShow && <ModalDialog handleCloseModal={handleCloseModal} />}
+      {isShow
+        && <ModalDialog>
+          <CreateNewUserComponent handleCloseModal={handleCloseModal} />
+        </ModalDialog>}
       <Container>
         <AddMemberButton
           type='submit'
