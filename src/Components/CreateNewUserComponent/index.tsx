@@ -161,7 +161,6 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
 
     if (newName.trim().length < minNameLength) {
       setShowAlert(wrongName);
-      console.log(123);
     } else {
       setShowAlert('');
     }

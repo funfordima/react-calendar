@@ -6,7 +6,10 @@ import GenerateItems from './GenerateItems/GenerateItems';
 import MainContent from './MainContent/MainContent';
 import ModalDialog from '../ModalDialog';
 import DeleteEventComponent from '../DeleteEventComponent';
-import { dayLabel, timeLabel } from '../../constants/constants';
+import { dayLabel, timeLabel, message, MAIN_URL, EVENTS } from '../../constants/constants';
+import { AlertError, AlertSuccess } from '../styledComponents';
+import { Events } from '../../interfaces';
+import Data from '../../utils/data';
 
 const MainContainer = styled.main`
   margin: 5rem 0;
@@ -92,13 +95,42 @@ const ContentContainer = styled.div`
 const Main: React.FC = () => {
   const { events, isLoading } = useContext(MainContext);
   const [isShow, setShow] = useState(false);
+  const [delEvent, setDelEvent] = useState('');
+  const [eventData, setEventData] = useState<Events[] | []>([]);
+  const { setEvents } = useContext(MainContext);
+  const [isShowAlert, setShowAlert] = useState('');
+  const [isShowSuccess, setShowSuccess] = useState('');
 
-  const handlerDelEvent = (): void => {
+  const handlerClickBtnDelEvent = (eventName: string): void => {
     setShow(true);
+    setDelEvent(eventName);
   };
 
   const handleCloseModal = (): void => {
     setShow(false);
+  };
+
+  const getEventData = (data: Events[]): void => {
+    setEventData(data);
+  };
+
+  const handlerConfirmDeleteEvent = (): void => {
+    const { success } = message;
+
+    // new Data(MAIN_URL).putData(EVENTS, eventData, idEvent)
+    new Data(MAIN_URL).sendData(EVENTS, eventData)
+      .then(() => {
+        setShowSuccess(success);
+
+        setTimeout(() => {
+          setShowSuccess('');
+          setEvents(eventData);
+          handleCloseModal();
+        }, 1000);
+      })
+      .catch((err) => {
+        setShowAlert(err.message);
+      });
   };
 
   return (
@@ -113,11 +145,31 @@ const Main: React.FC = () => {
             <GenerateItems data={timeLabel} />
           </ColContainer>
           <ContentContainer>
-            <MainContent events={events} deleteEvent={handlerDelEvent} />
+            <MainContent
+              events={events}
+              deleteEvent={handlerClickBtnDelEvent}
+              getEventData={getEventData}
+            />
           </ContentContainer>
           {isShow
             && <ModalDialog >
-              <DeleteEventComponent eventTitle='123' handleCloseModal={handleCloseModal} />
+              <DeleteEventComponent
+                eventTitle={delEvent}
+                handleCloseModal={handleCloseModal}
+                handlerConfirmDeleteEvent={handlerConfirmDeleteEvent}
+              />
+              {isShowAlert
+                &&
+                <AlertError>
+                  {isShowAlert}
+                </AlertError>
+              }
+              {isShowSuccess
+                &&
+                <AlertSuccess>
+                  {isShowSuccess}
+                </AlertSuccess>
+              }
             </ModalDialog>
           }
         </MainContainer>

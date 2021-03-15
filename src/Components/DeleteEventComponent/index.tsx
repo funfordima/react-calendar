@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ModalTitle = styled.h3`
+  margin-bottom: 3rem;
   text-align: center;
 `;
 
@@ -66,12 +67,13 @@ const Button = styled.input`
 interface DeleteEventComponentProps {
   eventTitle: string;
   handleCloseModal: () => void;
+  handlerConfirmDeleteEvent: () => void;
 }
 
-const DeleteEventComponent: React.FC<DeleteEventComponentProps> = ({ eventTitle, handleCloseModal }) => (
+const DeleteEventComponent: React.FC<DeleteEventComponentProps> = ({ eventTitle, handleCloseModal, handlerConfirmDeleteEvent }) => (
   <>
     <ModalTitle tab-index='0'>
-      `Are you sure you want to delete the event: ${eventTitle}?`
+      Are you sure you want to delete the event: &apos;{eventTitle}&lsquo;?
   </ModalTitle>
     <ModalRow>
       <Button
@@ -81,7 +83,7 @@ const DeleteEventComponent: React.FC<DeleteEventComponentProps> = ({ eventTitle,
         name='modal-submit'
         tab-index='0'
         aria-label='Confirm'
-        disabled
+        onClick={handlerConfirmDeleteEvent}
       />
       <Button
         className='cancel-button'

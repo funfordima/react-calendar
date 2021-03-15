@@ -13,12 +13,15 @@ const MainPage: React.FC = () => {
   const [events, setEvents] = useState<Events[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [members, setMembers] = useState<string[]>([]);
+  const [idEvent, setIdEvent] = useState('');
 
   const mainContext = {
     events,
     members,
     isLoading,
     setMembers,
+    idEvent,
+    setEvents,
   };
 
   useEffect(() => {
@@ -27,6 +30,9 @@ const MainPage: React.FC = () => {
       const json = await response.json();
 
       const receivedEvents = JSON.parse((json[json.length - 1]).data);
+      const { id } = (json[json.length - 1]);
+
+      setIdEvent(id);
 
       localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
       setEvents(receivedEvents as unknown as Events[]);
@@ -46,11 +52,12 @@ const MainPage: React.FC = () => {
       localStorage.setItem(MEMBERS, JSON.stringify(receivedMembers));
 
       const newMembers = mapMembers(receivedMembers);
+
       setMembers(newMembers);
     };
 
     fetchData();
-  }, [members]);
+  }, []);
 
   return (
     <MainContext.Provider value={mainContext}>
