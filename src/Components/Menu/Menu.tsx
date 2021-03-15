@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import MainContext from '../../context/mainContext';
 import { Button } from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
-import mapMembers from '../../utils/mapMembers';
 import { EVENTS } from '../../constants/constants';
 import { Events } from '../../interfaces';
 
 const MenuContainer = styled.div`
+  margin: 0 auto;
 `;
 
 const Menu = styled.div`
@@ -90,13 +90,15 @@ const ButtonResetForm = styled(Button)`
 interface MenuComponentProps {
   isShowBtn?: boolean;
   showTitle?: (title: string) => void;
+  data: string[];
+  isCheckbox?: boolean;
 }
 
-const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTitle = () => undefined }) => {
+const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTitle = () => undefined, data, isCheckbox = false }) => {
   const [isActive, setActive] = useState(false);
   const [isShowTitle, setShowTitle] = useState('');
 
-  const { members, setEvents } = useContext(MainContext);
+  const { setEvents } = useContext(MainContext);
   const receiveEvents = JSON.parse(String(localStorage.getItem(EVENTS)));
 
   /* eslint no-param-reassign: 0 */
@@ -147,7 +149,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
           onClick={handleMenuClick}
         >
           <MenuContent className='menu__content'>
-            <MenuContentComponent data={mapMembers(members)} handleClick={handleTitleClick} />
+            <MenuContentComponent data={data} handleClick={handleTitleClick} isCheckbox={isCheckbox} />
           </MenuContent>
           <MenuTitle
             className='menu__title'

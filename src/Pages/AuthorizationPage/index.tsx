@@ -1,50 +1,13 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import MainContext from '../../context/mainContext';
+import AppContext from '../../context/appContext';
 import Loader from '../../Components/Loader';
 import ModalDialog from '../../Components/ModalDialog';
 import Menu from '../../Components/Menu/Menu';
+import { ModalTitle, ModalForm, ModalRow } from '../../Components/styledComponents';
 import { Members } from '../../interfaces';
-
-const ModalTitle = styled.h3`
-  margin-bottom: 2rem;
-  text-align: center;
-`;
-
-const ModalForm = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ModalRow = styled.div`
-  margin-bottom: 2rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &:last-of-type {
-    margin-top: 2rem;
-  }
-
-  &.-column {
-    flex-direction: column;
-
-    & .error-msg {
-      margin-top: 1rem;
-      font-size: 1.4rem;
-      line-height: 1.5;
-
-      &:after {
-        width: 2rem;
-        height: 2rem;
-        background-size: 2rem 2rem;
-      }
-    }
-  }
-`;
+import mapMembers from '../../utils/mapMembers';
 
 const Button = styled.input`
   display: block;
@@ -76,7 +39,8 @@ const Button = styled.input`
 `;
 
 const AuthorizationPage: React.FC = () => {
-  const { isLoading, setUser, members } = useContext(MainContext);
+  const { isLoading, setUser } = useContext(MainContext);
+  const { members } = useContext(AppContext);
   const [title, setTitle] = useState('');
 
   const showTitle = (str: string): void => {
@@ -99,7 +63,7 @@ const AuthorizationPage: React.FC = () => {
             Choose User
         </ModalTitle>
           <ModalForm name='modal-form'>
-            <Menu showTitle={showTitle} />
+            <Menu showTitle={showTitle} data={mapMembers(members)} />
             <ModalRow>
               <Button
                 className='submit-button state-0'

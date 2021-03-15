@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { nanoid } from 'nanoid';
 import mainContext from '../../../context/mainContext';
 import { MainItem } from '../../styledComponents';
 import { Events } from '../../../interfaces';
@@ -51,7 +52,7 @@ const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEvent
     deleteEvent(eventName as string);
 
     const newEvent = {
-      id: `f${(+new Date()).toString(16)}`,
+      id: nanoid(),
       title: '',
       participants: [''],
       day: eventDay,
@@ -75,16 +76,14 @@ const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEvent
   return (
     <>
       {events.map(({
-        id,
         title,
         complete,
         day,
         time,
         participants,
       }) => (
-        <div key={id}>
+        <div key={nanoid()}>
           <MainItem
-            data-key={id}
             data-complete={complete}
             data-day={day}
             data-time={time}

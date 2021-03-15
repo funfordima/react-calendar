@@ -44,22 +44,23 @@ const MenuLabel = styled.label`
 interface MenuContentComponentProps {
   data: string[];
   handleClick: (str: string) => void;
+  isCheckbox?: boolean;
 }
 
-const MenuContentComponent: React.FC<MenuContentComponentProps> = ({ data, handleClick }) => (
+const MenuContentComponent: React.FC<MenuContentComponentProps> = ({ data, handleClick, isCheckbox = false }) => (
   <>
     {data.map((item) => (
       <Fragment key={item}>
         <MenuInput
           id={`select_${item}`}
-          type='radio'
+          type={isCheckbox ? 'checkbox' : 'radio'}
           name='select'
           className='menu__input'
         />
         <MenuLabel
           htmlFor={`select_${item}`}
           tab-index='0'
-          className='menu__label'
+          className={isCheckbox ? 'menu__label member' : 'menu__label'}
           onClick={(event) => handleClick(event.currentTarget.textContent as unknown as string)}
         >
           {item}

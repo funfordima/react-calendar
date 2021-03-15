@@ -134,3 +134,63 @@ export const AlertSuccess = styled.div`
     background-position: center center;
   }
 `;
+
+export const Label = styled.label`
+  width: 10rem;
+  font-size: 1.5rem;
+`;
+
+export const Input = styled.input`
+  margin: 0 auto;
+  padding-left: 1rem;
+  width: 23rem;
+  height: 4rem;
+  border-radius: 0.5rem;
+  border: 1px solid #c7ccd1;
+  position: relative;
+  outline: none;
+
+  &:hover {
+    border: 1px solid #d8093a;
+  }
+`;
+
+export const ModalTitle = styled.h3`
+  margin-bottom: 2rem;
+  text-align: center;
+`;
+
+export const ModalForm = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ModalRow = styled.div`
+margin-bottom: 2rem;
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+&:last-of-type {
+  margin-top: 2rem;
+}
+
+&.-column {
+  flex-direction: column;
+
+  & .error-msg {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    line-height: 1.5;
+
+    &:after {
+      width: 2rem;
+      height: 2rem;
+      background-size: 2rem 2rem;
+    }
+  }
+}
+`;
