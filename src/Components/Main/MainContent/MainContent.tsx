@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import mainContext from '../../../context/mainContext';
 import { MainItem } from '../../styledComponents';
 import { Events } from '../../../interfaces';
 import { EVENTS } from '../../../constants/constants';
@@ -39,6 +40,9 @@ interface MainContentProps {
 }
 
 const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEventData }) => {
+  const { user } = useContext(mainContext);
+  const { isAdmin } = user;
+
   const handleClickDelBtn = ({ target }: React.MouseEvent<HTMLDivElement>): void => {
     const eventName = (target as HTMLDivElement).getAttribute('data-title');
     const eventTime = (target as HTMLDivElement).getAttribute('data-time');
@@ -90,7 +94,7 @@ const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEvent
             <Title>
               {title}
             </Title>
-            <DelEventBtn
+            {isAdmin && <DelEventBtn
               tab-index='0'
               data-day={day}
               data-time={time}
@@ -98,7 +102,8 @@ const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEvent
               onClick={handleClickDelBtn}
             >
               ×
-          </DelEventBtn>
+              </DelEventBtn>
+            }
           </MainItem>
         </div>
       ))}

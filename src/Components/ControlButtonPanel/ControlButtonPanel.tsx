@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import mainContext from '../../context/mainContext';
 import { Button, UserButton } from '../styledComponents';
 import ModalDialog from '../ModalDialog';
 import CreateNewUserComponent from '../CreateNewUserComponent';
+import User from '../../utils/User';
 
 const Container = styled.div`
   margin: 20px auto;
@@ -89,6 +91,7 @@ const AddEventButton = styled(Button)`
 
 const ControlButtonPanel: React.FC = () => {
   const [isShow, setShow] = useState(false);
+  const { user, setUser } = useContext(mainContext);
 
   const addNewUser = (): void => {
     setShow(true);
@@ -98,6 +101,12 @@ const ControlButtonPanel: React.FC = () => {
     setShow(false);
   };
 
+  const handleChangeUser = (): void => {
+    setUser(new User(''));
+  };
+
+  const { isAdmin } = user;
+
   return (
     <>
       {isShow
@@ -105,23 +114,28 @@ const ControlButtonPanel: React.FC = () => {
           <CreateNewUserComponent handleCloseModal={handleCloseModal} />
         </ModalDialog>}
       <Container>
-        <AddMemberButton
-          type='submit'
-          value='New Member +'
-          onClick={addNewUser}
-        >
-          New Member +
+        {isAdmin
+          && <AddMemberButton
+            type='submit'
+            value='New Member +'
+            onClick={addNewUser}
+          >
+            New Member +
         </AddMemberButton>
+        }
         <ChangeMemberButton
-          type='submit'
+          type='button'
           value='Change User'
+          onClick={handleChangeUser}
         >
           Change User
         </ChangeMemberButton>
-        <AddEventButton
-          type='submit'
-          value='New Event +'
-        />
+        {isAdmin
+          && <AddEventButton
+            type='submit'
+            value='New Event +'
+          />
+        }
       </Container>
     </>
   );

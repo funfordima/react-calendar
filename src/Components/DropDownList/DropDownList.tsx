@@ -12,7 +12,7 @@ const Form = styled.form`
 
 const DropDownList: React.FC = () => (
   <Form name='members-form'>
-    <Menu />
+    <Menu isShowBtn={!!true} />
   </Form>
 );
 
