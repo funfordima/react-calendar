@@ -7,7 +7,7 @@ import { AlertError, AlertSuccess } from '../styledComponents';
 import { MEMBERS, MAIN_URL, message } from '../../constants/constants';
 import { Members } from '../../interfaces';
 import Data from '../../utils/data';
-import mapMembers from '../../utils/mapMembers';
+// import mapMembers from '../../utils/mapMembers';
 
 const ModalTitle = styled.h3`
   margin-bottom: 2rem;
@@ -134,14 +134,13 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
     } else {
       setShowAlert('');
       members.push(user);
-      const NewMembers = mapMembers(members);
 
       new Data(MAIN_URL).sendData(MEMBERS, members)
         .then(() => {
           setShowSuccess(success);
 
           setTimeout(() => {
-            setMembers(NewMembers);
+            setMembers(members);
             handleCloseModal();
           }, 2000);
         })

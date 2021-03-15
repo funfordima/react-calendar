@@ -1,13 +1,15 @@
 import { createContext } from 'react';
-import { Events } from '../interfaces';
+import { Events, Members } from '../interfaces';
 
 interface Context {
   events: Events[];
-  members: string[];
+  members: Members[];
   isLoading: boolean;
-  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
+  setMembers: React.Dispatch<React.SetStateAction<Members[]>>;
   setEvents: React.Dispatch<React.SetStateAction<Events[]>>;
   idEvent: string;
+  setUser: React.Dispatch<React.SetStateAction<Members>>;
+  user: Members;
 }
 
 const MainContext = createContext({} as Context);

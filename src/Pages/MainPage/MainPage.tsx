@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import MainContext from '../../context/mainContext';
+import AuthorizationPage from '../AuthorizationPage';
 import HeaderComponent from '../../Components/Header/Header';
 import ControlButtonPanel from '../../Components/ControlButtonPanel/ControlButtonPanel';
 import Main from '../../Components/Main/Main';
 import FooterComponent from '../../Components/Footer/Footer';
-import mapMembers from '../../utils/mapMembers';
 import Data from '../../utils/data';
 import { EVENTS, MAIN_URL, MEMBERS } from '../../constants/constants';
-import { Events } from '../../interfaces';
+import { Events, Members } from '../../interfaces';
 
 const MainPage: React.FC = () => {
   const [events, setEvents] = useState<Events[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const [members, setMembers] = useState<string[]>([]);
+  const [members, setMembers] = useState<Members[]>([]);
   const [idEvent, setIdEvent] = useState('');
+  const [user, setUser] = useState({} as Members);
 
   const mainContext = {
     events,
@@ -22,6 +23,8 @@ const MainPage: React.FC = () => {
     setMembers,
     idEvent,
     setEvents,
+    setUser,
+    user,
   };
 
   useEffect(() => {
@@ -51,9 +54,7 @@ const MainPage: React.FC = () => {
 
       localStorage.setItem(MEMBERS, JSON.stringify(receivedMembers));
 
-      const newMembers = mapMembers(receivedMembers);
-
-      setMembers(newMembers);
+      setMembers(receivedMembers);
     };
 
     fetchData();
@@ -61,10 +62,16 @@ const MainPage: React.FC = () => {
 
   return (
     <MainContext.Provider value={mainContext}>
-      <HeaderComponent />
-      <ControlButtonPanel />
-      <Main />
-      <FooterComponent />
+      {user.name
+        ? <>
+          <HeaderComponent />
+          <ControlButtonPanel />
+          <Main />
+          <FooterComponent />
+        </>
+        : <AuthorizationPage />
+      }
+
     </MainContext.Provider>
   );
 };
