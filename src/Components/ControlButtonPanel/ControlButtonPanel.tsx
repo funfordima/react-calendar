@@ -4,6 +4,7 @@ import mainContext from '../../context/mainContext';
 import { Button, UserButton } from '../styledComponents';
 import ModalDialog from '../ModalDialog';
 import CreateNewUserComponent from '../CreateNewUserComponent';
+import User from '../../utils/User';
 
 const Container = styled.div`
   margin: 20px auto;
@@ -90,7 +91,7 @@ const AddEventButton = styled(Button)`
 
 const ControlButtonPanel: React.FC = () => {
   const [isShow, setShow] = useState(false);
-  const { user } = useContext(mainContext);
+  const { user, setUser } = useContext(mainContext);
 
   const addNewUser = (): void => {
     setShow(true);
@@ -98,6 +99,10 @@ const ControlButtonPanel: React.FC = () => {
 
   const handleCloseModal = (): void => {
     setShow(false);
+  };
+
+  const handleChangeUser = (): void => {
+    setUser(new User(''));
   };
 
   const { isAdmin } = user;
@@ -119,8 +124,9 @@ const ControlButtonPanel: React.FC = () => {
         </AddMemberButton>
         }
         <ChangeMemberButton
-          type='submit'
+          type='button'
           value='Change User'
+          onClick={handleChangeUser}
         >
           Change User
         </ChangeMemberButton>
