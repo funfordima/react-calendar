@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import MainContext from '../../context/mainContext'
 import Loader from '../Loader';
@@ -92,7 +93,11 @@ const ContentContainer = styled.div`
   }
 `;
 
-const Main: React.FC = () => {
+interface MainProps {
+  isLoad: boolean;
+}
+
+const Main: React.FC<MainProps> = ({ isLoad }) => {
   const { events, isLoading } = useContext(MainContext);
   const [isShow, setShow] = useState(false);
   const [delEvent, setDelEvent] = useState('');
@@ -135,7 +140,7 @@ const Main: React.FC = () => {
 
   return (
     <>
-      {isLoading
+      {(isLoading && isLoad)
         ? <Loader />
         : <MainContainer>
           <RowContainer>
@@ -178,4 +183,8 @@ const Main: React.FC = () => {
   );
 };
 
-export default Main;
+const mapStateToProps = (state: any) => ({
+  isLoad: state.isLoad,
+});
+
+export default connect(mapStateToProps)(Main);

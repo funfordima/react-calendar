@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import updateLoading from '../../Redux/actions';
 import MainContext from '../../context/mainContext';
 import AuthorizationPage from '../AuthorizationPage';
 import HeaderComponent from '../../Components/Header/Header';
@@ -8,8 +10,13 @@ import FooterComponent from '../../Components/Footer/Footer';
 import Data from '../../utils/data';
 import { EVENTS, MAIN_URL } from '../../constants/constants';
 import { Events, Members } from '../../interfaces';
+import { UpdateLoading } from '../../Redux/interfaces';
 
-const MainPage: React.FC = () => {
+interface MainPageProps {
+  updateLoad: (value: boolean) => UpdateLoading;
+}
+
+const MainPage: React.FC<MainPageProps> = ({ updateLoad }) => {
   const [events, setEvents] = useState<Events[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [idEvent, setIdEvent] = useState('');
@@ -37,10 +44,11 @@ const MainPage: React.FC = () => {
       localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
       setEvents(receivedEvents as unknown as Events[]);
       setLoading(false);
+      updateLoad(false);
     };
 
     fetchData();
-  }, []);
+  }, [updateLoad]);
 
   return (
     <MainContext.Provider value={mainContext}>
@@ -58,6 +66,10 @@ const MainPage: React.FC = () => {
   );
 };
 
-export default MainPage;
+const mapDispatchToProps = () => ({
+  updateLoad: updateLoading,
+});
+
+export default connect(null, mapDispatchToProps)(MainPage);
 
 
