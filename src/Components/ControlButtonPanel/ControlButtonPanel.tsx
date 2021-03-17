@@ -1,11 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import mainContext from '../../context/mainContext';
+import { updateCurrentUser } from '../../Redux/actions';
 import { UserButton } from '../styledComponents';
 import ModalDialog from '../ModalDialog';
 import CreateNewUserComponent from '../CreateNewUserComponent';
 import User from '../../utils/User';
+import { State, Members, UpdateCurrentUser } from '../../Redux/interfaces';
 
 const Container = styled.div`
   margin: 20px auto;
@@ -108,9 +110,13 @@ const AddEventButton = styled(NavLink)`
   }
 `;
 
-const ControlButtonPanel: React.FC = () => {
+interface ControlButtonPanelProps {
+  user: Members;
+  updateUser: (user: Members) => UpdateCurrentUser;
+}
+
+const ControlButtonPanel: React.FC<ControlButtonPanelProps> = ({ user, updateUser }) => {
   const [isShow, setShow] = useState(false);
-  const { user, setUser } = useContext(mainContext);
 
   const addNewUser = (): void => {
     setShow(true);
@@ -121,7 +127,7 @@ const ControlButtonPanel: React.FC = () => {
   };
 
   const handleChangeUser = (): void => {
-    setUser(new User(''));
+    updateUser(new User(''));
   };
 
   const { isAdmin } = user;
@@ -160,4 +166,13 @@ const ControlButtonPanel: React.FC = () => {
     </>
   );
 };
-export default ControlButtonPanel;
+
+const mapStateToProps = (state: State) => ({
+  user: state.currentUser
+});
+
+const mapDispatchToProps = {
+  updateUser: updateCurrentUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ControlButtonPanel);

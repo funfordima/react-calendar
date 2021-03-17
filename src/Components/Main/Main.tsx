@@ -9,7 +9,7 @@ import ModalDialog from '../ModalDialog';
 import DeleteEventComponent from '../DeleteEventComponent';
 import { dayLabel, timeLabel, message, MAIN_URL, EVENTS } from '../../constants/constants';
 import { AlertError, AlertSuccess } from '../styledComponents';
-import { Events } from '../../interfaces';
+import { Events, State } from '../../Redux/interfaces';
 import Data from '../../utils/data';
 
 const MainContainer = styled.main`
@@ -95,10 +95,11 @@ const ContentContainer = styled.div`
 
 interface MainProps {
   isLoad: boolean;
+  eventID: string;
 }
 
-const Main: React.FC<MainProps> = ({ isLoad }) => {
-  const { events, isLoading } = useContext(MainContext);
+const Main: React.FC<MainProps> = ({ isLoad, eventID }) => {
+  const { events } = useContext(MainContext);
   const [isShow, setShow] = useState(false);
   const [delEvent, setDelEvent] = useState('');
   const [eventData, setEventData] = useState<Events[] | []>([]);
@@ -122,8 +123,8 @@ const Main: React.FC<MainProps> = ({ isLoad }) => {
   const handlerConfirmDeleteEvent = (): void => {
     const { success } = message;
 
-    // new Data(MAIN_URL).putData(EVENTS, eventData, idEvent)
-    new Data(MAIN_URL).sendData(EVENTS, eventData)
+    new Data(MAIN_URL).putData(EVENTS, eventData, eventID)
+      // new Data(MAIN_URL).sendData(EVENTS, eventData)
       .then(() => {
         setShowSuccess(success);
 
@@ -140,7 +141,7 @@ const Main: React.FC<MainProps> = ({ isLoad }) => {
 
   return (
     <>
-      {(isLoading && isLoad)
+      {isLoad
         ? <Loader />
         : <MainContainer>
           <RowContainer>
@@ -183,8 +184,9 @@ const Main: React.FC<MainProps> = ({ isLoad }) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: State) => ({
   isLoad: state.isLoad,
+  eventID: state.eventID,
 });
 
 export default connect(mapStateToProps)(Main);

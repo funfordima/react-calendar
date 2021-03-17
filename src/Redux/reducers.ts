@@ -9,6 +9,20 @@ const reducer = (state: any, action: any): State => {
       } 
     }
 
+    case 'UPDATE_ID': {
+      return {
+        ...state,
+        eventID: action.payload,
+      } 
+    }
+
+    case 'UPDATE_CURRENT_USER': {
+      return {
+        ...state,
+        currentUser: action.payload,
+      } 
+    }
+
     default: {
       return {...state};
     }

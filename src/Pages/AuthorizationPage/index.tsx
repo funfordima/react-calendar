@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import MainContext from '../../context/mainContext';
+import { connect } from 'react-redux';
+import { updateCurrentUser } from '../../Redux/actions';
 import AppContext from '../../context/appContext';
 import Loader from '../../Components/Loader';
 import ModalDialog from '../../Components/ModalDialog';
 import Menu from '../../Components/Menu/Menu';
 import { ModalTitle, ModalForm, ModalRow } from '../../Components/styledComponents';
-import { Members } from '../../interfaces';
+import { Members, UpdateCurrentUser } from '../../Redux/interfaces';
 import mapMembers from '../../utils/mapMembers';
 
 const Button = styled.input`
@@ -38,8 +39,12 @@ const Button = styled.input`
   }
 `;
 
-const AuthorizationPage: React.FC = () => {
-  const { isLoading, setUser } = useContext(MainContext);
+interface AuthorizationPageProps {
+  updateUser: (user: Members) => UpdateCurrentUser;
+  isLoad: boolean;
+}
+
+const AuthorizationPage: React.FC<AuthorizationPageProps> = ({ updateUser, isLoad }) => {
   const { members } = useContext(AppContext);
   const [title, setTitle] = useState('');
 
@@ -51,12 +56,12 @@ const AuthorizationPage: React.FC = () => {
 
   const handleClickUser = (): void => {
     const user = members.find(({ name }) => name === title);
-    setUser(user as Members);
+    updateUser(user as Members);
   }
 
   return (
     <>
-      {isLoading
+      {isLoad
         ? <Loader />
         : <ModalDialog>
           <ModalTitle tab-index='0'>
@@ -83,4 +88,12 @@ const AuthorizationPage: React.FC = () => {
   );
 };
 
-export default AuthorizationPage;
+const mapDispatchToProps = {
+  updateUser: updateCurrentUser,
+};
+
+const mapStateToProps = (state: any) => ({
+  isLoad: state.isLoad,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationPage);

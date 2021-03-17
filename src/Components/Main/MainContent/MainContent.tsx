@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { nanoid } from 'nanoid';
-import mainContext from '../../../context/mainContext';
+import { connect } from 'react-redux';
 import { MainItem } from '../../styledComponents';
-import { Events } from '../../../interfaces';
+import { Events, Members, State } from '../../../Redux/interfaces';
 import { EVENTS } from '../../../constants/constants';
 
 const Title = styled.h3`
@@ -38,10 +38,10 @@ interface MainContentProps {
   events: Events[];
   deleteEvent: (eventName: string) => void;
   getEventData: (data: Events[]) => void;
+  user: Members;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEventData }) => {
-  const { user } = useContext(mainContext);
+const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEventData, user }) => {
   const { isAdmin } = user;
 
   const handleClickDelBtn = ({ target }: React.MouseEvent<HTMLDivElement>): void => {
@@ -110,4 +110,8 @@ const MainContent: React.FC<MainContentProps> = ({ events, deleteEvent, getEvent
   );
 };
 
-export default MainContent;
+const mapStateToProps = (state: State) => ({
+  user: state.currentUser,
+});
+
+export default connect(mapStateToProps)(MainContent);

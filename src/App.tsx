@@ -13,6 +13,8 @@ import './App.scss';
 
 const defaultState = {
   isLoad: true,
+  eventID: '',
+  currentUser: {} as Members,
 };
 
 const store = createStore(reducer, defaultState);

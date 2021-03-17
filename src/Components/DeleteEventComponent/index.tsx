@@ -74,7 +74,7 @@ const DeleteEventComponent: React.FC<DeleteEventComponentProps> = ({ eventTitle,
   <>
     <ModalTitle tab-index='0'>
       Are you sure you want to delete the event: &apos;{eventTitle}&lsquo;?
-  </ModalTitle>
+    </ModalTitle>
     <ModalRow>
       <Button
         className='submit-button state-0'

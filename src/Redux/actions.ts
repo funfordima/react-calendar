@@ -1,8 +1,16 @@
-import { UpdateLoading } from './interfaces';
+import { UpdateLoading, UpdateEventID, UpdateCurrentUser, Members } from './interfaces';
 
-const updateLoading = (value: boolean): UpdateLoading => ({
+export const updateLoading = (value: boolean): UpdateLoading => ({
     type: 'UPDATE_LOADING',
     payload: value
   });
 
-export default updateLoading;
+export const updateEventID = (value: string): UpdateEventID => ({
+  type: 'UPDATE_ID',
+  payload: value
+});
+
+export const updateCurrentUser = (user: Members): UpdateCurrentUser => ({
+  type: 'UPDATE_CURRENT_USER',
+  payload: user
+});
