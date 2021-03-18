@@ -1,10 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import MainContext from '../../context/mainContext';
+import { connect } from 'react-redux';
 import { Button } from '../styledComponents';
 import MenuContentComponent from './MenuContent/MenuContent';
 import { EVENTS } from '../../constants/constants';
-import { Events } from '../../interfaces';
+import { Events, UpdateEvents } from '../../Redux/interfaces';
+import { updateEvents } from '../../Redux/actions';
 
 const MenuContainer = styled.div`
   margin: 0 auto;
@@ -92,13 +93,13 @@ interface MenuComponentProps {
   showTitle?: (title: string) => void;
   data: string[];
   isCheckbox?: boolean;
+  showEvent: (events: Events[]) => UpdateEvents;
 }
 
-const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTitle = () => undefined, data, isCheckbox = false }) => {
+const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTitle = () => undefined, data, isCheckbox = false, showEvent }) => {
   const [isActive, setActive] = useState(false);
   const [isShowTitle, setShowTitle] = useState('');
 
-  const { setEvents } = useContext(MainContext);
   const receiveEvents = JSON.parse(String(localStorage.getItem(EVENTS)));
 
   /* eslint no-param-reassign: 0 */
@@ -112,7 +113,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
       return todo;
     });
 
-    setEvents(newEvents);
+    showEvent(newEvents);
   };
 
   const handleMenuClick = (): void => {
@@ -136,7 +137,7 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
         return todo;
       });
 
-      setEvents(newEvents);
+      showEvent(newEvents);
     }
   };
 
@@ -165,4 +166,8 @@ const MenuComponent: React.FC<MenuComponentProps> = ({ isShowBtn = false, showTi
   )
 };
 
-export default MenuComponent;
+const mapDispatchToProps = {
+  showEvent: updateEvents,
+};
+
+export default connect(null, mapDispatchToProps)(MenuComponent);

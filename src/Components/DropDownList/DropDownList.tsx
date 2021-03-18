@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import AppContext from '../../context/appContext';
+import { connect } from 'react-redux';
 import Menu from '../Menu/Menu';
 import mapMembers from '../../utils/mapMembers';
+import { Members } from '../../Redux/interfaces';
 
 const Form = styled.form`
   width: 100%;
@@ -12,14 +13,18 @@ const Form = styled.form`
   color: #000;
 `;
 
-const DropDownList: React.FC = () => {
-  const { members } = useContext(AppContext);
+interface DropDownListProps {
+  users: Members[];
+}
 
-  return (
-    <Form name='members-form'>
-      <Menu isShowBtn={!!true} data={mapMembers(members)} />
-    </Form>
-  );
-};
+const DropDownList: React.FC<DropDownListProps> = ({ users }) => (
+  <Form name='members-form'>
+    <Menu isShowBtn={!!true} data={mapMembers(users)} />
+  </Form>
+);
 
-export default DropDownList;
+const mapStateToProps = (state: any) => ({
+  users: state.users,
+});
+
+export default connect(mapStateToProps)(DropDownList);

@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import MainContext from '../../context/mainContext';
-import AppContext from '../../context/appContext';
+import { connect } from 'react-redux';
+import { updateCurrentUser } from '../../Redux/actions';
 import Loader from '../../Components/Loader';
 import ModalDialog from '../../Components/ModalDialog';
 import Menu from '../../Components/Menu/Menu';
 import { ModalTitle, ModalForm, ModalRow } from '../../Components/styledComponents';
-import { Members } from '../../interfaces';
+import { Members, UpdateCurrentUser } from '../../Redux/interfaces';
 import mapMembers from '../../utils/mapMembers';
 
 const Button = styled.input`
@@ -38,9 +38,13 @@ const Button = styled.input`
   }
 `;
 
-const AuthorizationPage: React.FC = () => {
-  const { isLoading, setUser } = useContext(MainContext);
-  const { members } = useContext(AppContext);
+interface AuthorizationPageProps {
+  updateUser: (user: Members) => UpdateCurrentUser;
+  isLoad: boolean;
+  users: Members[];
+}
+
+const AuthorizationPage: React.FC<AuthorizationPageProps> = ({ updateUser, isLoad, users }) => {
   const [title, setTitle] = useState('');
 
   const showTitle = (str: string): void => {
@@ -50,20 +54,20 @@ const AuthorizationPage: React.FC = () => {
   };
 
   const handleClickUser = (): void => {
-    const user = members.find(({ name }) => name === title);
-    setUser(user as Members);
+    const user = users.find(({ name }) => name === title);
+    updateUser(user as Members);
   }
 
   return (
     <>
-      {isLoading
+      {isLoad
         ? <Loader />
         : <ModalDialog>
           <ModalTitle tab-index='0'>
             Choose User
         </ModalTitle>
           <ModalForm name='modal-form'>
-            <Menu showTitle={showTitle} data={mapMembers(members)} />
+            <Menu showTitle={showTitle} data={mapMembers(users)} />
             <ModalRow>
               <Button
                 className='submit-button state-0'
@@ -83,4 +87,13 @@ const AuthorizationPage: React.FC = () => {
   );
 };
 
-export default AuthorizationPage;
+const mapDispatchToProps = {
+  updateUser: updateCurrentUser,
+};
+
+const mapStateToProps = (state: any) => ({
+  isLoad: state.isLoad,
+  users: state.users,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationPage);
