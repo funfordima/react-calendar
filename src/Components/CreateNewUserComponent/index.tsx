@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import { AlertError, AlertSuccess, ModalTitle, ModalForm, Label, Input, ModalRow } from '../styledComponents';
-import AppContext from '../../context/appContext';
 import User from '../../utils/User';
 import Admin from '../../utils/Admin';
 import { MEMBERS, MAIN_URL, message } from '../../constants/constants';
 import { Members } from '../../interfaces';
 import Data from '../../utils/data';
+import { updateMembers, fetchUpdateSuccess } from '../../Redux/actions';
 
 const CheckBox = styled(Input)`
 margin-left: 2rem;
@@ -45,19 +46,18 @@ const Button = styled.input`
 
 interface CreateUserComponentProps {
   handleCloseModal: () => void;
+  onFetch: (param: string, body: Members[]) => void;
+  isUpdate: string;
 }
 
-const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleCloseModal }) => {
+const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleCloseModal, onFetch, isUpdate }) => {
   const [memberName, setMember] = useState('');
   const [isShowAlert, setShowAlert] = useState('');
-  const [isShowSuccess, setShowSuccess] = useState('');
   const [isChecked, setChecked] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { setMembers } = useContext(AppContext);
-
-  const { wrongName, existName, success } = message;
+  const { wrongName, existName } = message;
 
   const handleCreateUser = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -74,20 +74,25 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
       setShowAlert('');
       members.push(user);
 
-      new Data(MAIN_URL).sendData(MEMBERS, members)
-        .then(() => {
-          setShowSuccess(success);
+      onFetch(MEMBERS, members);
 
-          setTimeout(() => {
-            setMembers(members);
-            handleCloseModal();
-          }, 2000);
-        })
-        .catch((err) => {
-          setShowAlert(err.message);
-        });
+      if (isUpdate) {
+        setTimeout(() => {
+          handleCloseModal();
+        }, 2000);
+      }
+      //   })
+      //   .catch((err) => {
+      //     setShowAlert(err.message);
+      //   });
     }
   };
+
+  if (isUpdate) {
+    setTimeout(() => {
+      handleCloseModal();
+    }, 2000);
+  }
 
   const handleChangeName = ({ target }: React.ChangeEvent<HTMLInputElement>): void => {
     setMember(target.value);
@@ -174,12 +179,37 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
           {isShowAlert}
         </AlertError>
       }
-      {isShowSuccess
+      {isUpdate
         && <AlertSuccess>
-          {isShowSuccess}
+          {isUpdate}
         </AlertSuccess>}
     </>
   );
 };
 
-export default CreateNewUserComponent;
+const mapDispatchToProps = (dispatch: any) => ({
+  onFetch: (param: string, body: Members[]) => {
+    new Data(MAIN_URL).sendData(param, body)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('something was wrong')
+        }
+        return res.json();
+      })
+      .then(({ data }) => {
+        const receivedMembers = JSON.parse(data);
+        dispatch(updateMembers(receivedMembers as Members[]))
+      })
+      .then(() => dispatch(fetchUpdateSuccess(message.success)))
+      .then(() => {
+        setTimeout(() => dispatch(fetchUpdateSuccess('')), 2100);
+      });
+    // .catch((err) => dispatch(fetchUpdateError(err)));
+  }
+});
+
+const mapStateToProps = (state: any) => ({
+  isUpdate: state.isUpdate,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNewUserComponent);

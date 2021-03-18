@@ -30,6 +30,20 @@ const reducer = (state: any, action: any): State => {
       } 
     }
 
+    case 'UPDATE_EVENTS': {
+      return {
+        ...state,
+        events: action.payload,
+      } 
+    }
+
+    case 'FETCH_UPDATE_SUCCESS_USERS': {
+      return {
+        ...state,
+        isUpdate: action.payload,
+      } 
+    }
+
     default: {
       return {...state};
     }

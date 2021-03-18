@@ -1,4 +1,13 @@
-import { UpdateLoading, UpdateEventID, UpdateCurrentUser, Members, UpdateMembers } from './interfaces';
+import { 
+  UpdateLoading, 
+  UpdateEventID, 
+  UpdateCurrentUser, 
+  Members, 
+  UpdateMembers, 
+  Events, 
+  UpdateEvents,
+  FetchUpdateSuccess 
+} from './interfaces';
 
 export const updateLoading = (value: boolean): UpdateLoading => ({
     type: 'UPDATE_LOADING',
@@ -20,7 +29,12 @@ export const updateMembers = (users: Members[]): UpdateMembers => ({
   payload: users
 });
 
-export const fetchUpdateSuccess = (users: Members[]): UpdateMembers => ({
-  type: 'FETCH_UPDATE_SUCCESS',
-  payload: users
+export const updateEvents = (events: Events[]): UpdateEvents => ({
+  type: 'UPDATE_EVENTS',
+  payload: events
+});
+
+export const fetchUpdateSuccess = (message: string): FetchUpdateSuccess => ({
+  type: 'FETCH_UPDATE_SUCCESS_USERS',
+  payload: message
 });

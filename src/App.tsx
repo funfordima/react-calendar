@@ -73,7 +73,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         return res.json();
       })
       .then((json) => {
-        console.log(json);
         const receivedMembers = JSON.parse((json[json.length - 1]).data);
         dispatch(updateMembers(receivedMembers as Members[]))
       });

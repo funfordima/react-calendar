@@ -13,6 +13,7 @@ const defaultState = {
   eventID: '',
   currentUser: {} as Members,
   users: [] as Members[],
+  isUpdate: '',
 };
 
 const store = createStore(reducer, defaultState);

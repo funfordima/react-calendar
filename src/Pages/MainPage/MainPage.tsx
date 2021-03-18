@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateLoading, updateEventID } from '../../Redux/actions';
+import { updateLoading, updateEventID, updateEvents } from '../../Redux/actions';
 import MainContext from '../../context/mainContext';
 import AuthorizationPage from '../AuthorizationPage';
 import HeaderComponent from '../../Components/Header/Header';
@@ -16,9 +16,10 @@ interface MainPageProps {
   updateLoad: (value: boolean) => UpdateLoading;
   updateID: (value: string) => UpdateEventID;
   user: Members;
+  onFetch: (param: string) => void;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user }) => {
+const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user, onFetch }) => {
   const [events, setEvents] = useState<Events[]>([]);
 
   const mainContext = {
@@ -35,6 +36,7 @@ const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user }) => {
       const { id } = (json[json.length - 1]);
 
       updateID(id);
+      onFetch(EVENTS);
 
       localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
       setEvents(receivedEvents as unknown as Events[]);
@@ -42,7 +44,7 @@ const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user }) => {
     };
 
     fetchData();
-  }, [updateLoad, updateID]);
+  }, [updateLoad, updateID, onFetch]);
 
   return (
     <MainContext.Provider value={mainContext}>
@@ -60,10 +62,30 @@ const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user }) => {
   );
 };
 
-const mapDispatchToProps = {
-  updateLoad: updateLoading,
-  updateID: updateEventID,
-};
+// const mapDispatchToProps = {
+//   updateLoad: updateLoading,
+//   updateID: updateEventID,
+// };
+
+const mapDispatchToProps = (dispatch: any) => ({
+  updateLoad: (val: boolean) => dispatch(updateLoading(val)),
+  updateID: (id: string) => dispatch(updateEventID(id)),
+  onFetch: (param: string) => {
+    new Data(MAIN_URL).getData(param)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('something was wrong')
+        }
+        return res.json();
+      })
+      .then((json) => {
+        console.log(json);
+        const receivedEvents = JSON.parse((json[json.length - 1]).data);
+        dispatch(updateEvents(receivedEvents as Events[]))
+      });
+    // .catch((err) => dispatch(fetchUpdateError(err)));
+  }
+});
 
 const mapStateToProps = (state: State) => ({
   user: state.currentUser,

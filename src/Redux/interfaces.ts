@@ -39,3 +39,13 @@ export interface UpdateMembers {
   type: string,
   payload: Members[]
 }
+
+export interface UpdateEvents {
+  type: string,
+  payload: Events[]
+}
+
+export interface FetchUpdateSuccess {
+  type: string,
+  payload: string,
+}
