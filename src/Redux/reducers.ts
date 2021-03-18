@@ -1,6 +1,15 @@
-import { State } from './interfaces';
+import { State, Members, Events } from './interfaces';
 
-const reducer = (state: any, action: any): State => {
+const defaultState = {
+  isLoad: true,
+  eventID: '',
+  currentUser: {} as Members,
+  users: [] as Members[],
+  isUpdate: '',
+  events: [] as Events[],
+};
+
+const reducer = (state = defaultState, action: any): State => {
   switch (action.type) {
     case 'UPDATE_LOADING': {
       return {

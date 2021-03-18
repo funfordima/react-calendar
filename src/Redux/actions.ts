@@ -6,7 +6,8 @@ import {
   UpdateMembers, 
   Events, 
   UpdateEvents,
-  FetchUpdateSuccess 
+  FetchUpdateSuccess,
+  ShowEvents 
 } from './interfaces';
 
 export const updateLoading = (value: boolean): UpdateLoading => ({
@@ -30,6 +31,11 @@ export const updateMembers = (users: Members[]): UpdateMembers => ({
 });
 
 export const updateEvents = (events: Events[]): UpdateEvents => ({
+  type: 'UPDATE_EVENTS',
+  payload: events
+});
+
+export const showEvents = (events: Events[]): ShowEvents => ({
   type: 'UPDATE_EVENTS',
   payload: events
 });

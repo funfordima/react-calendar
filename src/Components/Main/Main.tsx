@@ -201,7 +201,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         return res.json();
       })
       .then((json) => {
-        console.log(json);
         const receivedEvents = JSON.parse(json.data);
         dispatch(updateEvents(receivedEvents as Events[]))
       })

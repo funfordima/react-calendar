@@ -48,6 +48,11 @@ export interface UpdateEvents {
   payload: Events[]
 }
 
+export interface ShowEvents {
+  type: string,
+  payload: Events[]
+}
+
 export interface FetchUpdateSuccess {
   type: string,
   payload: string,
