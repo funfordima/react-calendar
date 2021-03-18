@@ -7,7 +7,8 @@ import {
   Events, 
   UpdateEvents,
   FetchUpdateSuccess,
-  ShowEvents 
+  ShowEvents,
+  FetchUpdateError 
 } from './interfaces';
 
 export const updateLoading = (value: boolean): UpdateLoading => ({
@@ -42,5 +43,10 @@ export const showEvents = (events: Events[]): ShowEvents => ({
 
 export const fetchUpdateSuccess = (message: string): FetchUpdateSuccess => ({
   type: 'FETCH_UPDATE_SUCCESS_USERS',
+  payload: message
+});
+
+export const fetchUpdateError = (message: string): FetchUpdateError => ({
+  type: 'FETCH_UPDATE_ERROR',
   payload: message
 });

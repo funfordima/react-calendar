@@ -7,7 +7,7 @@ import Admin from '../../utils/Admin';
 import { MEMBERS, MAIN_URL, message } from '../../constants/constants';
 import { Members } from '../../interfaces';
 import Data from '../../utils/data';
-import { updateMembers, fetchUpdateSuccess } from '../../Redux/actions';
+import { updateMembers, fetchUpdateSuccess, fetchUpdateError } from '../../Redux/actions';
 
 const CheckBox = styled(Input)`
 margin-left: 2rem;
@@ -48,9 +48,10 @@ interface CreateUserComponentProps {
   handleCloseModal: () => void;
   onFetch: (param: string, body: Members[]) => void;
   isUpdate: string;
+  error: string;
 }
 
-const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleCloseModal, onFetch, isUpdate }) => {
+const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleCloseModal, onFetch, isUpdate, error }) => {
   const [memberName, setMember] = useState('');
   const [isShowAlert, setShowAlert] = useState('');
   const [isChecked, setChecked] = useState(false);
@@ -81,10 +82,6 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
           handleCloseModal();
         }, 2000);
       }
-      //   })
-      //   .catch((err) => {
-      //     setShowAlert(err.message);
-      //   });
     }
   };
 
@@ -179,6 +176,11 @@ const CreateNewUserComponent: React.FC<CreateUserComponentProps> = ({ handleClos
           {isShowAlert}
         </AlertError>
       }
+      {error
+        && <AlertError>
+          {error}
+        </AlertError>
+      }
       {isUpdate
         && <AlertSuccess>
           {isUpdate}
@@ -203,13 +205,17 @@ const mapDispatchToProps = (dispatch: any) => ({
       .then(() => dispatch(fetchUpdateSuccess(message.success)))
       .then(() => {
         setTimeout(() => dispatch(fetchUpdateSuccess('')), 2100);
+      })
+      .catch((e) => dispatch(fetchUpdateError(e.message)))
+      .finally(() => {
+        setTimeout(() => dispatch(fetchUpdateError('')), 2100);
       });
-    // .catch((err) => dispatch(fetchUpdateError(err)));
   }
 });
 
 const mapStateToProps = (state: any) => ({
   isUpdate: state.isUpdate,
+  error: state.error,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateNewUserComponent);

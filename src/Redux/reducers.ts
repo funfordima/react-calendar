@@ -7,6 +7,7 @@ const defaultState = {
   users: [] as Members[],
   isUpdate: '',
   events: [] as Events[],
+  error: ''
 };
 
 const reducer = (state = defaultState, action: any): State => {
@@ -50,6 +51,13 @@ const reducer = (state = defaultState, action: any): State => {
       return {
         ...state,
         isUpdate: action.payload,
+      } 
+    }
+
+    case 'FETCH_UPDATE_ERROR': {
+      return {
+        ...state,
+        error: action.payload,
       } 
     }
 

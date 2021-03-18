@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateLoading, updateEventID, updateEvents } from '../../Redux/actions';
+import { updateLoading, updateEventID, updateEvents, fetchUpdateError } from '../../Redux/actions';
 import AuthorizationPage from '../AuthorizationPage';
 import HeaderComponent from '../../Components/Header/Header';
 import ControlButtonPanel from '../../Components/ControlButtonPanel/ControlButtonPanel';
@@ -10,38 +10,20 @@ import Data from '../../utils/data';
 import { EVENTS, MAIN_URL } from '../../constants/constants';
 import { Events } from '../../interfaces';
 import {
-  UpdateLoading,
-  UpdateEventID,
   State,
   Members,
 } from '../../Redux/interfaces';
 
 interface MainPageProps {
-  updateLoad: (value: boolean) => UpdateLoading;
-  updateID: (value: string) => UpdateEventID;
   user: Members;
   onFetch: (param: string) => void;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user, onFetch }) => {
+const MainPage: React.FC<MainPageProps> = ({ user, onFetch }) => {
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      const response = await new Data(MAIN_URL).getData(EVENTS);
-      const json = await response.json();
-
-      const receivedEvents = JSON.parse((json[json.length - 1]).data);
-      const { id } = (json[json.length - 1]);
-
-      updateID(id);
-      onFetch(EVENTS);
-
-      localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
-      updateLoad(false);
-    };
-
-    fetchData();
-  }, [updateLoad, updateID, onFetch]);
+    onFetch(EVENTS);
+  }, [onFetch]);
 
   return (
     <>
@@ -59,11 +41,6 @@ const MainPage: React.FC<MainPageProps> = ({ updateLoad, updateID, user, onFetch
   );
 };
 
-// const mapDispatchToProps = {
-//   updateLoad: updateLoading,
-//   updateID: updateEventID,
-// };
-
 const mapDispatchToProps = (dispatch: any) => ({
   updateLoad: (val: boolean) => dispatch(updateLoading(val)),
   updateID: (id: string) => dispatch(updateEventID(id)),
@@ -77,9 +54,14 @@ const mapDispatchToProps = (dispatch: any) => ({
       })
       .then((json) => {
         const receivedEvents = JSON.parse((json[json.length - 1]).data);
+        localStorage.setItem(EVENTS, JSON.stringify(receivedEvents));
+        const { id } = (json[json.length - 1]);
+
+        dispatch(updateEventID(id));
+        dispatch(updateLoading(false));
         dispatch(updateEvents(receivedEvents as Events[]))
-      });
-    // .catch((err) => dispatch(fetchUpdateError(err)));
+      })
+      .catch((e) => dispatch(fetchUpdateError(e.message)));
   }
 });
 

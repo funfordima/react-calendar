@@ -16,19 +16,7 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ onFetch }) => {
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      const response = await new Data(MAIN_URL).getData(MEMBERS);
-      const json = await response.json();
-
-      const receivedMembers = JSON.parse((json[json.length - 1]).data);
-
-      localStorage.setItem(MEMBERS, JSON.stringify(receivedMembers));
-    };
-
-    fetchData();
-
     onFetch(MEMBERS);
-
   }, [onFetch]);
 
   return (
@@ -52,6 +40,7 @@ const mapDispatchToProps = (dispatch: any) => ({
       })
       .then((json) => {
         const receivedMembers = JSON.parse((json[json.length - 1]).data);
+        localStorage.setItem(MEMBERS, JSON.stringify(receivedMembers));
         dispatch(updateMembers(receivedMembers as Members[]))
       });
     // .catch((err) => dispatch(fetchUpdateError(err)));

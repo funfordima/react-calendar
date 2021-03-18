@@ -21,6 +21,7 @@ export interface State {
   users: Members[],
   isUpdate: string,
   events: Events[],
+  error: string,
 }
 
 export interface UpdateLoading {
@@ -54,6 +55,11 @@ export interface ShowEvents {
 }
 
 export interface FetchUpdateSuccess {
+  type: string,
+  payload: string,
+}
+
+export interface FetchUpdateError {
   type: string,
   payload: string,
 }

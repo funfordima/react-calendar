@@ -7,10 +7,10 @@ import MainContent from './MainContent/MainContent';
 import ModalDialog from '../ModalDialog';
 import DeleteEventComponent from '../DeleteEventComponent';
 import { dayLabel, timeLabel, MAIN_URL, EVENTS, message } from '../../constants/constants';
-import { AlertSuccess } from '../styledComponents';
+import { AlertSuccess, AlertError } from '../styledComponents';
 import { Events, State } from '../../Redux/interfaces';
 import Data from '../../utils/data';
-import { updateEvents, fetchUpdateSuccess } from '../../Redux/actions';
+import { updateEvents, fetchUpdateSuccess, fetchUpdateError } from '../../Redux/actions';
 
 const MainContainer = styled.main`
   margin: 5rem 0;
@@ -99,13 +99,13 @@ interface MainProps {
   events: Events[];
   onFetch: (param: string, data: Events[], id: string) => void;
   isUpdate: string;
+  error: string;
 }
 
-const Main: React.FC<MainProps> = ({ isLoad, eventID, events, onFetch, isUpdate }) => {
+const Main: React.FC<MainProps> = ({ isLoad, eventID, events, onFetch, isUpdate, error }) => {
   const [isShow, setShow] = useState(false);
   const [delEvent, setDelEvent] = useState('');
   const [eventData, setEventData] = useState<Events[] | []>([]);
-  // const [isShowAlert, setShowAlert] = useState('');
 
   const handlerClickBtnDelEvent = (eventName: string): void => {
     setShow(true);
@@ -122,15 +122,6 @@ const Main: React.FC<MainProps> = ({ isLoad, eventID, events, onFetch, isUpdate 
 
   const handlerConfirmDeleteEvent = (): void => {
     onFetch(EVENTS, eventData, eventID);
-    // .then(() => {
-
-    //   setTimeout(() => {
-    //     setEvents(eventData);
-    //   }, 1000);
-    // })
-    // .catch((err) => {
-    //   setShowAlert(err.message);
-    // });
   };
 
   if (isUpdate) {
@@ -164,12 +155,12 @@ const Main: React.FC<MainProps> = ({ isLoad, eventID, events, onFetch, isUpdate 
                 handleCloseModal={handleCloseModal}
                 handlerConfirmDeleteEvent={handlerConfirmDeleteEvent}
               />
-              {/* {isShowAlert
+              {error
                 &&
                 <AlertError>
-                  {isShowAlert}
+                  {error}
                 </AlertError>
-              } */}
+              }
               {isUpdate
                 &&
                 <AlertSuccess>
@@ -189,6 +180,7 @@ const mapStateToProps = (state: State) => ({
   eventID: state.eventID,
   events: state.events,
   isUpdate: state.isUpdate,
+  error: state.error,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -207,8 +199,11 @@ const mapDispatchToProps = (dispatch: any) => ({
       .then(() => dispatch(fetchUpdateSuccess(message.success)))
       .then(() => {
         setTimeout(() => dispatch(fetchUpdateSuccess('')), 2100);
+      })
+      .catch((e) => dispatch(fetchUpdateError(e.message)))
+      .finally(() => {
+        setTimeout(() => dispatch(fetchUpdateError('')), 2100);
       });
-    // .catch((err) => dispatch(fetchUpdateError(err)));
   }
 });
 
