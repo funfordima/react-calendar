@@ -6,7 +6,7 @@ import reducer from './Redux/reducers';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Members } from './interfaces';
+import { Members, Events } from './Redux/interfaces';
 
 const defaultState = {
   isLoad: true,
@@ -14,6 +14,7 @@ const defaultState = {
   currentUser: {} as Members,
   users: [] as Members[],
   isUpdate: '',
+  events: [] as Events[],
 };
 
 const store = createStore(reducer, defaultState);

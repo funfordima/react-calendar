@@ -1,16 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import MainContext from '../../context/mainContext'
 import Loader from '../Loader';
 import GenerateItems from './GenerateItems/GenerateItems';
 import MainContent from './MainContent/MainContent';
 import ModalDialog from '../ModalDialog';
 import DeleteEventComponent from '../DeleteEventComponent';
-import { dayLabel, timeLabel, message, MAIN_URL, EVENTS } from '../../constants/constants';
-import { AlertError, AlertSuccess } from '../styledComponents';
+import { dayLabel, timeLabel, MAIN_URL, EVENTS, message } from '../../constants/constants';
+import { AlertSuccess } from '../styledComponents';
 import { Events, State } from '../../Redux/interfaces';
 import Data from '../../utils/data';
+import { updateEvents, fetchUpdateSuccess } from '../../Redux/actions';
 
 const MainContainer = styled.main`
   margin: 5rem 0;
@@ -96,16 +96,16 @@ const ContentContainer = styled.div`
 interface MainProps {
   isLoad: boolean;
   eventID: string;
+  events: Events[];
+  onFetch: (param: string, data: Events[], id: string) => void;
+  isUpdate: string;
 }
 
-const Main: React.FC<MainProps> = ({ isLoad, eventID }) => {
-  const { events } = useContext(MainContext);
+const Main: React.FC<MainProps> = ({ isLoad, eventID, events, onFetch, isUpdate }) => {
   const [isShow, setShow] = useState(false);
   const [delEvent, setDelEvent] = useState('');
   const [eventData, setEventData] = useState<Events[] | []>([]);
-  const { setEvents } = useContext(MainContext);
-  const [isShowAlert, setShowAlert] = useState('');
-  const [isShowSuccess, setShowSuccess] = useState('');
+  // const [isShowAlert, setShowAlert] = useState('');
 
   const handlerClickBtnDelEvent = (eventName: string): void => {
     setShow(true);
@@ -121,23 +121,23 @@ const Main: React.FC<MainProps> = ({ isLoad, eventID }) => {
   };
 
   const handlerConfirmDeleteEvent = (): void => {
-    const { success } = message;
+    onFetch(EVENTS, eventData, eventID);
+    // .then(() => {
 
-    new Data(MAIN_URL).putData(EVENTS, eventData, eventID)
-      // new Data(MAIN_URL).sendData(EVENTS, eventData)
-      .then(() => {
-        setShowSuccess(success);
-
-        setTimeout(() => {
-          setShowSuccess('');
-          setEvents(eventData);
-          handleCloseModal();
-        }, 1000);
-      })
-      .catch((err) => {
-        setShowAlert(err.message);
-      });
+    //   setTimeout(() => {
+    //     setEvents(eventData);
+    //   }, 1000);
+    // })
+    // .catch((err) => {
+    //   setShowAlert(err.message);
+    // });
   };
+
+  if (isUpdate) {
+    setTimeout(() => {
+      handleCloseModal();
+    }, 2000);
+  }
 
   return (
     <>
@@ -164,16 +164,16 @@ const Main: React.FC<MainProps> = ({ isLoad, eventID }) => {
                 handleCloseModal={handleCloseModal}
                 handlerConfirmDeleteEvent={handlerConfirmDeleteEvent}
               />
-              {isShowAlert
+              {/* {isShowAlert
                 &&
                 <AlertError>
                   {isShowAlert}
                 </AlertError>
-              }
-              {isShowSuccess
+              } */}
+              {isUpdate
                 &&
                 <AlertSuccess>
-                  {isShowSuccess}
+                  {isUpdate}
                 </AlertSuccess>
               }
             </ModalDialog>
@@ -187,6 +187,30 @@ const Main: React.FC<MainProps> = ({ isLoad, eventID }) => {
 const mapStateToProps = (state: State) => ({
   isLoad: state.isLoad,
   eventID: state.eventID,
+  events: state.events,
+  isUpdate: state.isUpdate,
 });
 
-export default connect(mapStateToProps)(Main);
+const mapDispatchToProps = (dispatch: any) => ({
+  onFetch: (param: string, data: Events[], id: string) => {
+    new Data(MAIN_URL).putData(param, data, id)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('something was wrong')
+        }
+        return res.json();
+      })
+      .then((json) => {
+        console.log(json);
+        const receivedEvents = JSON.parse(json.data);
+        dispatch(updateEvents(receivedEvents as Events[]))
+      })
+      .then(() => dispatch(fetchUpdateSuccess(message.success)))
+      .then(() => {
+        setTimeout(() => dispatch(fetchUpdateSuccess('')), 2100);
+      });
+    // .catch((err) => dispatch(fetchUpdateError(err)));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

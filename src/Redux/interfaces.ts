@@ -18,6 +18,9 @@ export interface State {
   isLoad: boolean,
   eventID: string,
   currentUser: Members,
+  users: Members[],
+  isUpdate: string,
+  events: Events[],
 }
 
 export interface UpdateLoading {
