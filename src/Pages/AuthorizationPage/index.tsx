@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from '../../Redux/actions';
-import AppContext from '../../context/appContext';
 import Loader from '../../Components/Loader';
 import ModalDialog from '../../Components/ModalDialog';
 import Menu from '../../Components/Menu/Menu';
@@ -42,10 +41,10 @@ const Button = styled.input`
 interface AuthorizationPageProps {
   updateUser: (user: Members) => UpdateCurrentUser;
   isLoad: boolean;
+  users: Members[];
 }
 
-const AuthorizationPage: React.FC<AuthorizationPageProps> = ({ updateUser, isLoad }) => {
-  const { members } = useContext(AppContext);
+const AuthorizationPage: React.FC<AuthorizationPageProps> = ({ updateUser, isLoad, users }) => {
   const [title, setTitle] = useState('');
 
   const showTitle = (str: string): void => {
@@ -55,7 +54,7 @@ const AuthorizationPage: React.FC<AuthorizationPageProps> = ({ updateUser, isLoa
   };
 
   const handleClickUser = (): void => {
-    const user = members.find(({ name }) => name === title);
+    const user = users.find(({ name }) => name === title);
     updateUser(user as Members);
   }
 
@@ -68,7 +67,7 @@ const AuthorizationPage: React.FC<AuthorizationPageProps> = ({ updateUser, isLoa
             Choose User
         </ModalTitle>
           <ModalForm name='modal-form'>
-            <Menu showTitle={showTitle} data={mapMembers(members)} />
+            <Menu showTitle={showTitle} data={mapMembers(users)} />
             <ModalRow>
               <Button
                 className='submit-button state-0'
@@ -94,6 +93,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: any) => ({
   isLoad: state.isLoad,
+  users: state.users,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationPage);

@@ -1,15 +1,15 @@
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { nanoid } from 'nanoid';
-import AppContext from '../../context/appContext';
 import ModalDialog from '../../Components/ModalDialog';
 import Menu from '../../Components/Menu/Menu';
 import { ModalTitle, ModalForm, Label, Input, AlertError, AlertSuccess } from '../../Components/styledComponents';
 import mapMembers from '../../utils/mapMembers';
 import Data from '../../utils/data';
 import { dayLabel, timeLabel, message, EVENTS, MAIN_URL } from '../../constants/constants';
-import { Events } from '../../interfaces';
+import { Events, Members } from '../../Redux/interfaces';
 
 const ModalRow = styled.div`
   margin-bottom: 2rem;
@@ -107,9 +107,11 @@ const ModalCloseBtn = styled(NavLink)`
   }
 `;
 
-const AddEventPage: React.FC = () => {
-  const { members } = useContext(AppContext);
+interface AddEventPageProps {
+  users: Members[];
+}
 
+const AddEventPage: React.FC<AddEventPageProps> = ({ users }) => {
   const buttonSubmitRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -286,7 +288,7 @@ const AddEventPage: React.FC = () => {
             Participants
         </Label>
           <Menu
-            data={mapMembers(members)}
+            data={mapMembers(users)}
             isCheckbox={!!true}
             showTitle={showParticipants}
           />
@@ -350,4 +352,8 @@ const AddEventPage: React.FC = () => {
   );
 };
 
-export default AddEventPage;
+const mapStateToProps = (state: any) => ({
+  users: state.users,
+});
+
+export default connect(mapStateToProps)(AddEventPage);

@@ -23,6 +23,13 @@ const reducer = (state: any, action: any): State => {
       } 
     }
 
+    case 'UPDATE_MEMBERS': {
+      return {
+        ...state,
+        users: action.payload,
+      } 
+    }
+
     default: {
       return {...state};
     }

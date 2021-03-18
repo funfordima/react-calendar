@@ -34,3 +34,8 @@ export interface UpdateCurrentUser {
   type: string,
   payload: Members
 }
+
+export interface UpdateMembers {
+  type: string,
+  payload: Members[]
+}
